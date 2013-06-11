@@ -1,0 +1,79 @@
+<div class="row">
+    <div class="large-12 columns">
+        <h2>Dashboard</h2>
+        <h3>Add an expense</h3>
+        <form name="form" class="css-form" novalidate>
+            <div class="row collapse">
+                <div class="small-3 large-2 columns">
+                    <span class="prefix">amount</span>
+                </div>
+                <div class="small-9 large-10 columns">
+                    <input type="text" placeholder="enter expense amount" ng-model="newExpense.amount" name="amount" smart-float />
+                    <span class="error" ng-show="form.amount.$error.float">Please enter a valid floating point number.</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-3 large-2 columns">
+                    <span class="prefix">tags</span>
+                </div>
+                <div class="small-9 large-10 columns">
+                    <input type="text" placeholder="enter comma-separated tags" ng-model="newExpense.tags" required />
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-2 small-centered columns">
+                    <input type="submit" class="button" value="add expense" ng-click="addExpense()" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-12 columns">
+        <div ng-hide="expenses.length">
+            <p>There are currently no expenses. Add some with the form above.</p>
+        </div>
+        <div ng-show="expenses.length">
+            <div class="row collapse">
+                <div class="small-5 large-3 columns">
+                    <span class="prefix"># expenses</span>
+                </div>
+                <div class="small-7 large-9 columns">
+                    <input type="number" ng-model="maxNumberOfExpenses" ng-change="getExpenses()" />
+                </div>
+            </div>
+            <div class="row">
+                <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tags</th>
+                        <th>Amount</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="expense in expenses | orderBy:'-date'">
+                        <td ng-click="editExpense(expense)">{{ expense.date | date }}</td>
+
+                        <td ng-hide="expense.editing" ng-click="editExpense(expense)">{{ expense.tags }}</td>
+                        <td ng-show="expense.editing"><input type="text" ng-model="expense.tags"></td>
+
+                        <td ng-hide="expense.editing" ng-click="editExpense(expense)">{{ expense.amount }}</td>
+                        <td ng-show="expense.editing"><input type="text" ng-model="expense.amount"></td>
+
+                        <td ng-hide="expense.editing"><a ng-click="removeExpense(expense)">&#215;</a></td>
+                        <td ng-show="expense.editing"><a ng-click="saveExpense(expense)">save</a></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td><strong>{{ totalExpenseAmount() }}</strong></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
